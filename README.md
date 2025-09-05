@@ -140,6 +140,13 @@ Once the services are running:
 5.  **Manage Portfolio:** View your bond holdings, track performance, and initiate sell orders.
 6.  **Learn:** Engage with the gamified educational modules to enhance your financial literacy.
 
+### 📹 Videos
+
+#### 1. BondFlow Walkthrough – Retail Investor Journey
+[![Watch the video](docs/thumb01.png)](Vdos/SeBIxVdo01.mp4)
+[![Watch the video](docs/thumb02.png)](Vdos/SeBIxVdo02.mp4)
+
+
 ## Future Enhancements
 
 *   Integration with more DPI services (e.g., Account Aggregator).
