@@ -76,6 +76,7 @@ BondFlow is built on a robust, scalable, and secure technology stack:
 Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the docs/ directory.
 
 [![BondFlow Architecture Diagram](docs/ArchxSeBI02.png)](docs/ArchxSeBI02.png)
+[![BondFlow Architecture Diagram](docs/ArchxSeBI03.png)](docs/ArchxSeBI03.png)
 
 ## Detailed Documentation
 
