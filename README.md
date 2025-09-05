@@ -140,11 +140,11 @@ Once the services are running:
 5.  **Manage Portfolio:** View your bond holdings, track performance, and initiate sell orders.
 6.  **Learn:** Engage with the gamified educational modules to enhance your financial literacy.
 
-### 📹 Videos
+## 🎥 Videos  
 
-#### 1. BondFlow Walkthrough – Retail Investor Journey
-[![Watch the video](docs/thumb01.png)](Vdos/SeBIxVdo01.mp4)
-[![Watch the video](docs/thumb02.png)](Vdos/SeBIxVdo02.mp4)
+### BondFlow Walkthrough  
+<iframe src="https://drive.google.com/file/d/1xWPhj6ufcEVmPkJbNjpgGggyhppgv3jX/preview" width="640" height="360" allow="autoplay"></iframe>  
+<iframe src="https://drive.google.com/file/d/182yhwObHD2HyYfmyosL2DOMnEptlbOpI/preview" width="640" height="360" allow="autoplay"></iframe>  
 
 
 ## Future Enhancements
