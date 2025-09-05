@@ -76,152 +76,133 @@ BondFlow is built on a robust, scalable, and secure technology stack:
 Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the `docs/` directory.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {
-  'primaryColor': '#0ea5e9',
-  'primaryTextColor': '#111827',
-  'primaryBorderColor': '#0c4a6e',
-  'lineColor': '#64748b',
-  'secondaryColor': '#f8fafc',
-  'tertiaryColor': '#e2e8f0'
-}}}%%
+---
+config:
+  theme: base
+  themeVariables:
+    primaryColor: '#0ea5e9'
+    primaryTextColor: '#111827'
+    primaryBorderColor: '#0c4a6e'
+    lineColor: '#64748b'
+    secondaryColor: '#f8fafc'
+    tertiaryColor: '#e2e8f0'
+  layout: elk
+---
 flowchart LR
-
-  %% Client Layer
-  subgraph C[Client Layer]
-    A1[Mobile App (React Native)]
-    A2[Web App (React)]
-    A3[Issuer Portal]
-    A4[Regulator Console]
+ subgraph C["Client Layer"]
+        A1["Mobile App (React Native)"]
+        A2["Web App (React)"]
+        A3["Issuer Portal"]
+        A4["Regulator Console"]
   end
-
-  %% Edge & Gateway
-  subgraph EG[Edge & Gateway]
-    WAF[CDN + WAF]
-    GW[API Gateway]
+ subgraph EG["Edge & Gateway"]
+        WAF["CDN + WAF"]
+        GW["API Gateway"]
   end
-
-  %% Core Microservices
-  subgraph MS[Core Microservices]
-    ORD[Orders API]
-    MATCH[AI Matching Engine]
-    OB[Real-time Order Book]
-    MKT[Market Data Ingest]
-    KYC[KYC/AML Service]
-    PAY[Payments Service]
-    BLK[Blockchain Adapter]
-    RISK[Risk & Limits]
-    COMP[Compliance & Reporting]
-    NOTIF[Notifications]
+ subgraph MS["Core Microservices"]
+        ORD["Orders API"]
+        MATCH["AI Matching Engine"]
+        OB["Real-time Order Book"]
+        MKT["Market Data Ingest"]
+        KYC["KYC/AML Service"]
+        PAY["Payments Service"]
+        BLK["Blockchain Adapter"]
+        RISK["Risk & Limits"]
+        COMP["Compliance & Reporting"]
+        NOTIF["Notifications"]
   end
-
-  %% Data Stores
-  subgraph DS[Data Stores]
-    PG[(PostgreSQL)]
-    NOSQL[(Mongo/Cassandra)]
-    CACHE[(Redis)]
-    LAKE[(Data Lake: S3/GCS)]
+ subgraph DS["Data Stores"]
+        PG[("PostgreSQL")]
+        NOSQL[("Mongo/Cassandra")]
+        CACHE[("Redis")]
+        LAKE[("Data Lake: S3/GCS")]
   end
-
-  %% Permissioned Blockchain
-  subgraph CH[Permissioned Blockchain]
-    SC[Smart Contracts (ERC-1400)]
-    PEER[(Peer/Validator Nodes)]
-    CONS[(Orderer/Consensus)]
+ subgraph CH["Permissioned Blockchain"]
+        SC["Smart Contracts (ERC-1400)"]
+        PEER[("Peer/Validator Nodes")]
+        CONS[("Orderer/Consensus")]
   end
-
-  %% External Integrations
-  subgraph EXT[External Integrations]
-    AAD[Aadhaar eKYC]
-    UPI[UPI PSP]
-    DEPO[Depositories (NSDL/CDSL)]
-    CLEAR[Clearing Corp]
-    FEED[Market Feeds]
+ subgraph EXT["External Integrations"]
+        AAD["Aadhaar eKYC"]
+        UPI["UPI PSP"]
+        DEPO["Depositories (NSDL/CDSL)"]
+        CLEAR["Clearing Corp"]
+        FEED["Market Feeds"]
   end
-
-  %% Analytics & Ops
-  subgraph AO[Analytics & Ops]
-    BUS[Event Bus (Kafka/Kinesis)]
-    DWH[(Data Warehouse)]
-    BI[Dashboards (Issuer/Regulator)]
-    OBS[Observability (ELK/CloudWatch)]
-    SEC[Security (KMS/IAM/Vault)]
-    CICD[CI/CD]
+ subgraph AO["Analytics & Ops"]
+        BUS["Event Bus (Kafka/Kinesis)"]
+        DWH[("Data Warehouse")]
+        BI["Dashboards (Issuer/Regulator)"]
+        OBS["Observability (ELK/CloudWatch)"]
+        SEC["Security (KMS/IAM/Vault)"]
+        CICD["CI/CD"]
   end
+    A1 --> WAF
+    A2 --> WAF
+    A3 --> WAF
+    A4 --> WAF
+    WAF --> GW
+    GW --> ORD & KYC & PAY & NOTIF & OBS
+    ORD <--> MATCH
+    MATCH <--> OB
+    MKT --> OB & NOSQL & LAKE & FEED & BUS
+    ORD --> RISK & COMP & BLK & PG & BUS & OBS
+    RISK --> PG
+    KYC --> PG & AAD
+    COMP --> PG & LAKE
+    OB --> NOSQL
+    MATCH --> CACHE & OBS
+    BLK --> SC & CLEAR
+    SC --> PEER
+    PEER --> CONS
+    BLK -- Atomic DvP --> DEPO
+    PAY --> UPI
+    BUS --> DWH
+    DWH --> BI
+    SEC --- GW & BLK
+    CICD --- GW & ORD & BLK
+     A1:::client
+     A2:::client
+     A3:::client
+     A4:::client
+     WAF:::edge
+     GW:::edge
+     ORD:::core
+     MATCH:::core
+     OB:::core
+     MKT:::core
+     KYC:::core
+     PAY:::core
+     BLK:::core
+     RISK:::core
+     COMP:::core
+     NOTIF:::core
+     PG:::data
+     NOSQL:::data
+     CACHE:::data
+     LAKE:::data
+     SC:::chain
+     PEER:::chain
+     CONS:::chain
+     AAD:::ext
+     UPI:::ext
+     DEPO:::ext
+     CLEAR:::ext
+     FEED:::ext
+     BUS:::ops
+     DWH:::ops
+     BI:::ops
+     OBS:::ops
+     SEC:::ops
+     CICD:::ops
+    classDef client fill:#fef3c7,stroke:#a16207,color:#111,stroke-width:1px
+    classDef edge fill:#e0f2fe,stroke:#0369a1,color:#111,stroke-width:1px
+    classDef core fill:#dcfce7,stroke:#065f46,color:#111,stroke-width:1px
+    classDef data fill:#e5e7eb,stroke:#374151,color:#111,stroke-width:1px
+    classDef chain fill:#fde68a,stroke:#92400e,color:#111,stroke-width:1px
+    classDef ext fill:#fee2e2,stroke:#991b1b,color:#111,stroke-width:1px
+    classDef ops fill:#e0e7ff,stroke:#3730a3,color:#111,stroke-width:1px
 
-  %% Client paths
-  A1 --> WAF
-  A2 --> WAF
-  A3 --> WAF
-  A4 --> WAF
-  WAF --> GW
-
-  %% Gateway routing
-  GW --> ORD
-  GW --> KYC
-  GW --> PAY
-  GW --> NOTIF
-
-  %% Core flows
-  ORD <--> MATCH
-  MATCH <--> OB
-  MKT --> OB
-  ORD --> RISK
-  ORD --> COMP
-  ORD --> BLK
-
-  %% Storage
-  ORD --> PG
-  RISK --> PG
-  KYC --> PG
-  COMP --> PG
-  MKT --> NOSQL
-  OB --> NOSQL
-  MATCH --> CACHE
-  MKT --> LAKE
-  COMP --> LAKE
-
-  %% Blockchain
-  BLK --> SC
-  SC --> PEER
-  PEER --> CONS
-  BLK -->|Atomic DvP| DEPO
-  BLK --> CLEAR
-
-  %% External calls
-  KYC --> AAD
-  PAY --> UPI
-  MKT --> FEED
-
-  %% Analytics & Ops
-  ORD --> BUS
-  MKT --> BUS
-  BUS --> DWH
-  DWH --> BI
-  GW --> OBS
-  ORD --> OBS
-  MATCH --> OBS
-  SEC --- GW
-  SEC --- BLK
-  CICD --- GW
-  CICD --- ORD
-  CICD --- BLK
-
-  %% Classes
-  class A1,A2,A3,A4 client
-  class WAF,GW edge
-  class ORD,MATCH,OB,MKT,KYC,PAY,BLK,RISK,COMP,NOTIF core
-  class PG,NOSQL,CACHE,LAKE data
-  class SC,PEER,CONS chain
-  class AAD,UPI,DEPO,CLEAR,FEED ext
-  class BUS,DWH,BI,OBS,SEC,CICD ops
-
-  classDef client fill:#fef3c7,stroke:#a16207,color:#111,stroke-width:1px
-  classDef edge fill:#e0f2fe,stroke:#0369a1,color:#111,stroke-width:1px
-  classDef core fill:#dcfce7,stroke:#065f46,color:#111,stroke-width:1px
-  classDef data fill:#e5e7eb,stroke:#374151,color:#111,stroke-width:1px
-  classDef chain fill:#fde68a,stroke:#92400e,color:#111,stroke-width:1px
-  classDef ext fill:#fee2e2,stroke:#991b1b,color:#111,stroke-width:1px
-  classDef ops fill:#e0e7ff,stroke:#3730a3,color:#111,stroke-width:1px
 ```
 
 ## Detailed Documentation
