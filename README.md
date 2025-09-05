@@ -12,6 +12,7 @@
 - [Feasibility & Scalability](#feasibility--scalability)
 - [Market Impact & Alignment with SEBI's Mandate](#market-impact--alignment-with-sebis-mandate)
 - [Usage](#usage)
+- [Videos](#-videos)
 - [Future Enhancements](#future-enhancements)
 - [Team](#team)
 - [License](#license)
@@ -139,6 +140,12 @@ Once the services are running:
 4.  **Invest:** Place buy orders for fractional bonds. The AI matching engine will process your order.
 5.  **Manage Portfolio:** View your bond holdings, track performance, and initiate sell orders.
 6.  **Learn:** Engage with the gamified educational modules to enhance your financial literacy.
+
+## 🎥 Videos  
+
+### BondFlow Walkthrough  
+🔗 [Watch Video on Google Drive](https://drive.google.com/file/d/1xWPhj6ufcEVmPkJbNjpgGggyhppgv3jX/view?usp=sharing)  
+🔗 [Watch Video on Google Drive](https://drive.google.com/file/d/182yhwObHD2HyYfmyosL2DOMnEptlbOpI/view?usp=sharing)  
 
 ## Future Enhancements
 
