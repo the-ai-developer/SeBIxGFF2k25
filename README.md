@@ -76,43 +76,152 @@ BondFlow is built on a robust, scalable, and secure technology stack:
 Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the `docs/` directory.
 
 ```mermaid
-graph TD
-    A[Retail Investor App/Web] --> B(API Gateway)
-    B --> C{Microservices Layer}
-    C --> D[AI Matching Engine]
-    C --> E[Blockchain Service]
-    C --> F[KYC/AML Service]
-    C --> G[Payment Gateway Integration]
-    D --> H[Market Data Feeds]
-    E --> I[Permissioned Blockchain Network]
-    F --> J[Aadhaar API]
-    G --> K[UPI API]
-    C --> L[Databases]
-    C --> M[Cloud Storage]
-    M --> N[Data Analytics & BI]
-    N --> O[Regulator Dashboard]
-    N --> P[Issuer Dashboard]
-    I --> Q[Depositories]
-    Q --> R[Underlying Corporate Bonds]
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#0ea5e9',
+  'primaryTextColor': '#111827',
+  'primaryBorderColor': '#0c4a6e',
+  'lineColor': '#64748b',
+  'secondaryColor': '#f8fafc',
+  'tertiaryColor': '#e2e8f0'
+}}}%%
+flowchart LR
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#ccf,stroke:#333,stroke-width:2px
-    style D fill:#cfc,stroke:#333,stroke-width:2px
-    style E fill:#cff,stroke:#333,stroke-width:2px
-    style F fill:#fcc,stroke:#333,stroke-width:2px
-    style G fill:#ffc,stroke:#333,stroke-width:2px
-    style H fill:#eee,stroke:#333,stroke-width:2px
-    style I fill:#fcf,stroke:#333,stroke-width:2px
-    style J fill:#eee,stroke:#333,stroke-width:2px
-    style K fill:#eee,stroke:#333,stroke-width:2px
-    style L fill:#eef,stroke:#333,stroke-width:2px
-    style M fill:#efe,stroke:#333,stroke-width:2px
-    style N fill:#ffe,stroke:#333,stroke-width:2px
-    style O fill:#fce,stroke:#333,stroke-width:2px
-    style P fill:#fec,stroke:#333,stroke-width:2px
-    style Q fill:#eec,stroke:#333,stroke-width:2px
-    style R fill:#eed,stroke:#333,stroke-width:2px
+  %% Client Layer
+  subgraph C[Client Layer]
+    A1[Mobile App (React Native)]
+    A2[Web App (React)]
+    A3[Issuer Portal]
+    A4[Regulator Console]
+  end
+
+  %% Edge & Gateway
+  subgraph EG[Edge & Gateway]
+    WAF[CDN + WAF]
+    GW[API Gateway]
+  end
+
+  %% Core Microservices
+  subgraph MS[Core Microservices]
+    ORD[Orders API]
+    MATCH[AI Matching Engine]
+    OB[Real-time Order Book]
+    MKT[Market Data Ingest]
+    KYC[KYC/AML Service]
+    PAY[Payments Service]
+    BLK[Blockchain Adapter]
+    RISK[Risk & Limits]
+    COMP[Compliance & Reporting]
+    NOTIF[Notifications]
+  end
+
+  %% Data Stores
+  subgraph DS[Data Stores]
+    PG[(PostgreSQL)]
+    NOSQL[(Mongo/Cassandra)]
+    CACHE[(Redis)]
+    LAKE[(Data Lake: S3/GCS)]
+  end
+
+  %% Permissioned Blockchain
+  subgraph CH[Permissioned Blockchain]
+    SC[Smart Contracts (ERC-1400)]
+    PEER[(Peer/Validator Nodes)]
+    CONS[(Orderer/Consensus)]
+  end
+
+  %% External Integrations
+  subgraph EXT[External Integrations]
+    AAD[Aadhaar eKYC]
+    UPI[UPI PSP]
+    DEPO[Depositories (NSDL/CDSL)]
+    CLEAR[Clearing Corp]
+    FEED[Market Feeds]
+  end
+
+  %% Analytics & Ops
+  subgraph AO[Analytics & Ops]
+    BUS[Event Bus (Kafka/Kinesis)]
+    DWH[(Data Warehouse)]
+    BI[Dashboards (Issuer/Regulator)]
+    OBS[Observability (ELK/CloudWatch)]
+    SEC[Security (KMS/IAM/Vault)]
+    CICD[CI/CD]
+  end
+
+  %% Client paths
+  A1 --> WAF
+  A2 --> WAF
+  A3 --> WAF
+  A4 --> WAF
+  WAF --> GW
+
+  %% Gateway routing
+  GW --> ORD
+  GW --> KYC
+  GW --> PAY
+  GW --> NOTIF
+
+  %% Core flows
+  ORD <--> MATCH
+  MATCH <--> OB
+  MKT --> OB
+  ORD --> RISK
+  ORD --> COMP
+  ORD --> BLK
+
+  %% Storage
+  ORD --> PG
+  RISK --> PG
+  KYC --> PG
+  COMP --> PG
+  MKT --> NOSQL
+  OB --> NOSQL
+  MATCH --> CACHE
+  MKT --> LAKE
+  COMP --> LAKE
+
+  %% Blockchain
+  BLK --> SC
+  SC --> PEER
+  PEER --> CONS
+  BLK -->|Atomic DvP| DEPO
+  BLK --> CLEAR
+
+  %% External calls
+  KYC --> AAD
+  PAY --> UPI
+  MKT --> FEED
+
+  %% Analytics & Ops
+  ORD --> BUS
+  MKT --> BUS
+  BUS --> DWH
+  DWH --> BI
+  GW --> OBS
+  ORD --> OBS
+  MATCH --> OBS
+  SEC --- GW
+  SEC --- BLK
+  CICD --- GW
+  CICD --- ORD
+  CICD --- BLK
+
+  %% Classes
+  class A1,A2,A3,A4 client
+  class WAF,GW edge
+  class ORD,MATCH,OB,MKT,KYC,PAY,BLK,RISK,COMP,NOTIF core
+  class PG,NOSQL,CACHE,LAKE data
+  class SC,PEER,CONS chain
+  class AAD,UPI,DEPO,CLEAR,FEED ext
+  class BUS,DWH,BI,OBS,SEC,CICD ops
+
+  classDef client fill:#fef3c7,stroke:#a16207,color:#111,stroke-width:1px
+  classDef edge fill:#e0f2fe,stroke:#0369a1,color:#111,stroke-width:1px
+  classDef core fill:#dcfce7,stroke:#065f46,color:#111,stroke-width:1px
+  classDef data fill:#e5e7eb,stroke:#374151,color:#111,stroke-width:1px
+  classDef chain fill:#fde68a,stroke:#92400e,color:#111,stroke-width:1px
+  classDef ext fill:#fee2e2,stroke:#991b1b,color:#111,stroke-width:1px
+  classDef ops fill:#e0e7ff,stroke:#3730a3,color:#111,stroke-width:1px
 ```
 
 ## Detailed Documentation
