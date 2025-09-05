@@ -143,9 +143,8 @@ Once the services are running:
 ## 🎥 Videos  
 
 ### BondFlow Walkthrough  
-<iframe src="https://drive.google.com/file/d/1xWPhj6ufcEVmPkJbNjpgGggyhppgv3jX/preview" width="640" height="360" allow="autoplay"></iframe>  
-<iframe src="https://drive.google.com/file/d/182yhwObHD2HyYfmyosL2DOMnEptlbOpI/preview" width="640" height="360" allow="autoplay"></iframe>  
-
+🔗 [Watch Video on Google Drive](https://drive.google.com/file/d/1xWPhj6ufcEVmPkJbNjpgGggyhppgv3jX/view?usp=sharing)  
+🔗 [Watch Video on Google Drive](https://drive.google.com/file/d/182yhwObHD2HyYfmyosL2DOMnEptlbOpI/view?usp=sharing)  
 
 ## Future Enhancements
 
