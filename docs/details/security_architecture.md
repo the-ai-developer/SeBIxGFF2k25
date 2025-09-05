@@ -13,23 +13,25 @@ Multi-layered controls across edge, app, data, blockchain, identity, and ops. Bu
 ## 0) Layered Security Blueprint
 ```mermaid
 flowchart LR
-  A[Users & Admins] -->|HTTPS/TLS1.3| B[CDN + WAF + DDoS]
-  B --> C[API Gateway]
-  C --> D[Service Mesh (mTLS, AuthZ, Telemetry)]
-  D --> E[Microservices (K8s Restricted)]
-  E --> F[(Databases: Postgres/Redis/ClickHouse)]
-  E --> G[(Streams: Kafka)]
-  E --> H[(Object Store / Lake)]
-  E --> I[Blockchain Writer/Endorser]
-  I --> J[Validators/Ordering (Permissioned)]
-  J --> K[SEBI Observer Node]
-  subgraph Security & Ops
-    L[SIEM/XDR/UEBA]
-    M[KMS/HSM + Vault]
-    N[DLP + CASB]
-    O[OPA/Gatekeeper Policies]
-    P[EDR on Hosts]
+  A["Users & Admins"] -->|HTTPS/TLS1.3| B["CDN + WAF + DDoS"]
+  B --> C["API Gateway"]
+  C --> D["Service Mesh (mTLS, AuthZ, Telemetry)"]
+  D --> E["Microservices (K8s Restricted)"]
+  E --> F["Databases: Postgres / Redis / ClickHouse"]
+  E --> G["Streams: Kafka"]
+  E --> H["Object Store / Lake"]
+  E --> I["Blockchain Writer / Endorser"]
+  I --> J["Validators / Ordering (Permissioned)"]
+  J --> K["SEBI Observer Node"]
+
+  subgraph SecOps["Security and Ops"]
+    L["SIEM / XDR / UEBA"]
+    M["KMS / HSM + Vault"]
+    N["DLP + CASB"]
+    O["OPA / Gatekeeper Policies"]
+    P["EDR on Hosts"]
   end
+
   F --> L
   G --> L
   H --> L
