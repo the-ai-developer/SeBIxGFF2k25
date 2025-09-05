@@ -16,60 +16,83 @@ This document deepens the original overview with concrete architectures, data fl
 
 ```mermaid
 flowchart LR
-  subgraph Sources
-    OB[Real-time Order Book]
-    HTX[Historical Trades]
-    BOND[Bond Fundamentals]
-    KYC[KYC/AML Providers]
-    SNT[News & Social Sentiment]
-    AUTH[Login/Device/Session]
+  %% Sources
+  subgraph Sources["Sources"]
+    OB["Real-time Order Book"]
+    HTX["Historical Trades"]
+    BOND["Bond Fundamentals"]
+    KYCP["KYC / AML Providers"]
+    SNT["News & Social Sentiment"]
+    AUTH["Login / Device / Session"]
   end
 
-  OB --> KAFKA[(Kafka Topics)]
+  %% Streams & Storage
+  KAFKA["Kafka Topics"]
+  DWH["Lakehouse / DWH"]
+  FLINK["Stream Processing - Flink"]
+  FEAST["Feature Store"]
+
+  %% ML Services
+  MATCH["ML Matching Service"]
+  FRAUD["Fraud Scoring Service"]
+  RECO["Recommender Service"]
+
+  %% Match layer internals
+  subgraph Match_Layer["Match Layer"]
+    CORE["Rule-based Matcher"]
+    RL["RL Optimizer"]
+    GNN["GNN Liquidity Routing"]
+  end
+
+  %% Outputs
+  API["Trading API"]
+  APP["Investor App"]
+
+  %% Ops
+  subgraph Ops["Ops"]
+    PROM["Metrics / Prometheus"]
+    LOGS["Logs / ELK"]
+    DRIFT["Drift & A/B"]
+    REG["Model Registry"]
+  end
+
+  %% Flows
+  OB --> KAFKA
   HTX --> KAFKA
-  BOND --> DWH[(Lakehouse / DWH)]
-  KYC --> DWH
   SNT --> KAFKA
   AUTH --> KAFKA
 
-  KAFKA --> FLINK[Stream Proc (Flink)]
-  FLINK --> FEAST[Feature Store]
+  BOND --> DWH
+  KYCP --> DWH
+
+  KAFKA --> FLINK
+  FLINK --> FEAST
   DWH --> FEAST
 
-  FEAST --> MATCH[ML Matching Service]
-  FEAST --> FRAUD[Fraud Scoring Service]
-  FEAST --> RECO[Recommender Service]
-
-  subgraph Match Layer
-    CORE[Rule-based Matcher]
-    RL[RL Optimizer]
-    GNN[GNN Liquidity Routing]
-  end
+  FEAST --> MATCH
+  FEAST --> FRAUD
+  FEAST --> RECO
 
   MATCH --> CORE
   MATCH --> RL
   MATCH --> GNN
 
-  MATCH --> API[(Trading API)]
+  MATCH --> API
   FRAUD --> API
-  RECO --> APP[Investor App]
-
-  subgraph Ops
-    PROM[Metrics/Prometheus]
-    LOGS[Logs/ELK]
-    DRIFT[Drift & A/B]
-    REG[Model Registry]
-  end
+  RECO --> APP
 
   MATCH --> PROM
   FRAUD --> PROM
   RECO --> PROM
+
   MATCH --> LOGS
   FRAUD --> LOGS
   RECO --> LOGS
+
   MATCH --> DRIFT
   FRAUD --> DRIFT
   RECO --> DRIFT
+
   REG <--> MATCH
   REG <--> FRAUD
   REG <--> RECO
