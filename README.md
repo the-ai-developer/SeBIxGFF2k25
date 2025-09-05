@@ -77,49 +77,53 @@ Below is a high-level overview of BondFlow's architecture. A more detailed diagr
 
 ```mermaid
 flowchart TB
-  subgraph Clients["Clients"]
+  subgraph Clients
+    direction TB
     Apps["Apps (Mobile & Web)"]
   end
 
   Gateway["API Gateway"]
 
   subgraph Core["Core Trading"]
+    direction TB
     Orders["Orders API"]
     Matching["Matching Engine"]
     OrderBook["Order Book"]
+    Orders <--> Matching
+    Matching <--> OrderBook
   end
-
-  KYC["KYC / AML"]
-  Payments["Payments"]
-  Data["DB + Cache"]
 
   subgraph Settlement["Blockchain & Settlement"]
+    direction TB
     Adapter["Blockchain Adapter"]
     ChainNode["Permissioned Chain (ERC-1400)"]
+    Adapter --> ChainNode
   end
 
+  Feeds["Market Feeds"]
+  Data["DB + Cache"]
+  KYC["KYC / AML"]
+  Payments["Payments"]
   Aadhaar["Aadhaar"]
   UPI["UPI PSP"]
-  Feeds["Market Feeds"]
   Depositories["Depositories"]
   Clearing["Clearing Corp"]
 
   Apps --> Gateway
+
   Gateway --> Orders
   Gateway --> KYC
   Gateway --> Payments
 
-  Orders <--> Matching
-  Matching <--> OrderBook
   Feeds --> OrderBook
 
   Orders --> Adapter
   Orders --> Data
   OrderBook --> Data
 
-  Adapter --> ChainNode
   ChainNode --> Depositories
   ChainNode --> Clearing
+
   KYC --> Aadhaar
   Payments --> UPI
 ```
