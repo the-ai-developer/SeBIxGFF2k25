@@ -75,44 +75,58 @@ BondFlow is built on a robust, scalable, and secure technology stack:
 
 Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the `docs/` directory.
 
-```mermaid
-graph TD
-    A[Retail Investor App/Web] --> B(API Gateway)
-    B --> C{Microservices Layer}
-    C --> D[AI Matching Engine]
-    C --> E[Blockchain Service]
-    C --> F[KYC/AML Service]
-    C --> G[Payment Gateway Integration]
-    D --> H[Market Data Feeds]
-    E --> I[Permissioned Blockchain Network]
-    F --> J[Aadhaar API]
-    G --> K[UPI API]
-    C --> L[Databases]
-    C --> M[Cloud Storage]
-    M --> N[Data Analytics & BI]
-    N --> O[Regulator Dashboard]
-    N --> P[Issuer Dashboard]
-    I --> Q[Depositories]
-    Q --> R[Underlying Corporate Bonds]
+```mermaidflowchart TB
+  subgraph Clients
+    A1[Mobile App]
+    A2[Web App]
+  end
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#ccf,stroke:#333,stroke-width:2px
-    style D fill:#cfc,stroke:#333,stroke-width:2px
-    style E fill:#cff,stroke:#333,stroke-width:2px
-    style F fill:#fcc,stroke:#333,stroke-width:2px
-    style G fill:#ffc,stroke:#333,stroke-width:2px
-    style H fill:#eee,stroke:#333,stroke-width:2px
-    style I fill:#fcf,stroke:#333,stroke-width:2px
-    style J fill:#eee,stroke:#333,stroke-width:2px
-    style K fill:#eee,stroke:#333,stroke-width:2px
-    style L fill:#eef,stroke:#333,stroke-width:2px
-    style M fill:#efe,stroke:#333,stroke-width:2px
-    style N fill:#ffe,stroke:#333,stroke-width:2px
-    style O fill:#fce,stroke:#333,stroke-width:2px
-    style P fill:#fec,stroke:#333,stroke-width:2px
-    style Q fill:#eec,stroke:#333,stroke-width:2px
-    style R fill:#eed,stroke:#333,stroke-width:2px
+  Gateway[API Gateway]
+
+  subgraph Core["Trading Core"]
+    ORD[Orders API]
+    MATCH[Matching Engine]
+    OB[Order Book]
+  end
+
+  subgraph Support["Support Services"]
+    KYC[KYC/AML]
+    PAY[Payments]
+  end
+
+  DATA[Databases + Cache]
+
+  subgraph Settlement["Blockchain & Settlement"]
+    BLK[Blockchain Adapter]
+    CH[Permissioned Chain (ERC-1400)]
+    DEPO[Depositories]
+    CLEAR[Clearing Corp]
+  end
+
+  FEED[Market Feeds]
+  AAD[Aadhaar]
+  UPI[UPI PSP]
+
+  A1 --> Gateway
+  A2 --> Gateway
+  Gateway --> ORD
+  Gateway --> KYC
+  Gateway --> PAY
+
+  ORD <--> MATCH
+  MATCH <--> OB
+  FEED --> OB
+
+  KYC --> AAD
+  PAY --> UPI
+
+  ORD --> DATA
+  OB --> DATA
+
+  ORD --> BLK
+  BLK --> CH
+  CH --> DEPO
+  CH --> CLEAR
 ```
 
 ## Detailed Documentation
