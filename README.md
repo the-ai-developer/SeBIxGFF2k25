@@ -78,56 +78,45 @@ Below is a high-level overview of BondFlow's architecture. A more detailed diagr
 ```mermaid
 flowchart TB
   subgraph Clients
-    A1[Mobile App]
-    A2[Web App]
+    Apps[Apps (Mobile/Web)]
   end
 
   Gateway[API Gateway]
 
-  subgraph Core["Trading Core"]
-    ORD[Orders API]
-    MATCH[Matching Engine]
-    OB[Order Book]
+  subgraph Core["Core Trading"]
+    Orders[Orders API]
+    Matching[Matching Engine]
+    OrderBook[Order Book]
   end
 
-  subgraph Support["Support Services"]
-    KYC[KYC/AML]
-    PAY[Payments]
+  KYC[KYC/AML]
+  Payments[Payments]
+  Data[DB + Cache]
+
+  subgraph Chain["Blockchain & Settlement"]
+    Adapter[Blockchain Adapter]
+    ChainNode[Permissioned Chain (ERC-1400)]
   end
 
-  DATA[Databases + Cache]
+  External[External Services: Aadhaar, UPI, Market Feeds, Depositories/Clearing]
 
-  subgraph Settlement["Blockchain & Settlement"]
-    BLK[Blockchain Adapter]
-    CH[Permissioned Chain (ERC-1400)]
-    DEPO[Depositories]
-    CLEAR[Clearing Corp]
-  end
-
-  FEED[Market Feeds]
-  AAD[Aadhaar]
-  UPI[UPI PSP]
-
-  A1 --> Gateway
-  A2 --> Gateway
-  Gateway --> ORD
+  Apps --> Gateway
+  Gateway --> Orders
   Gateway --> KYC
-  Gateway --> PAY
+  Gateway --> Payments
 
-  ORD <--> MATCH
-  MATCH <--> OB
-  FEED --> OB
+  Orders <--> Matching
+  Matching <--> OrderBook
 
-  KYC --> AAD
-  PAY --> UPI
+  Orders --> Adapter
+  Orders --> Data
+  OrderBook --> Data
 
-  ORD --> DATA
-  OB --> DATA
-
-  ORD --> BLK
-  BLK --> CH
-  CH --> DEPO
-  CH --> CLEAR
+  Adapter --> ChainNode
+  ChainNode --> External
+  KYC --> External
+  Payments --> External
+  External --> OrderBook
 ```
 
 ## Detailed Documentation
