@@ -75,7 +75,8 @@ BondFlow is built on a robust, scalable, and secure technology stack:
 
 Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the `docs/` directory.
 
-```mermaidflowchart TB
+```mermaid
+flowchart TB
   subgraph Clients
     A1[Mobile App]
     A2[Web App]
