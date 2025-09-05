@@ -73,60 +73,10 @@ BondFlow is built on a robust, scalable, and secure technology stack:
 
 ## Architecture Diagram
 
-Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the `docs/` directory.
+Below is a high-level overview of BondFlow's architecture. A more detailed diagram can be found in the docs/ directory.
 
-```mermaid
-flowchart TB
-  subgraph Clients
-    direction TB
-    Apps["Apps (Mobile & Web)"]
-  end
-
-  Gateway["API Gateway"]
-
-  subgraph Core["Core Trading"]
-    direction TB
-    Orders["Orders API"]
-    Matching["Matching Engine"]
-    OrderBook["Order Book"]
-    Orders <--> Matching
-    Matching <--> OrderBook
-  end
-
-  subgraph Settlement["Blockchain & Settlement"]
-    direction TB
-    Adapter["Blockchain Adapter"]
-    ChainNode["Permissioned Chain (ERC-1400)"]
-    Adapter --> ChainNode
-  end
-
-  Feeds["Market Feeds"]
-  Data["DB + Cache"]
-  KYC["KYC / AML"]
-  Payments["Payments"]
-  Aadhaar["Aadhaar"]
-  UPI["UPI PSP"]
-  Depositories["Depositories"]
-  Clearing["Clearing Corp"]
-
-  Apps --> Gateway
-
-  Gateway --> Orders
-  Gateway --> KYC
-  Gateway --> Payments
-
-  Feeds --> OrderBook
-
-  Orders --> Adapter
-  Orders --> Data
-  OrderBook --> Data
-
-  ChainNode --> Depositories
-  ChainNode --> Clearing
-
-  KYC --> Aadhaar
-  Payments --> UPI
-```
+[![BondFlow Architecture Diagram](docs/ArchxSeBI02.png)](docs/ArchxSeBI02.png)
+[![BondFlow Architecture Diagram](docs/ArchxSeBI03.png)](docs/ArchxSeBI03.png)
 
 ## Detailed Documentation
 
